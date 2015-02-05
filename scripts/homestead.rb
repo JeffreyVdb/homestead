@@ -1,7 +1,7 @@
 class Homestead
   def Homestead.configure(config, settings)
     # Configure The Box
-    config.vm.box = "laravel/homestead"
+    config.vm.box = settings["box_name"] ||= "laravel/homestead"
     config.vm.hostname = "homestead"
 
     # Configure A Private Network IP
@@ -15,6 +15,13 @@ class Homestead
       vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
       vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
       vb.customize ["modifyvm", :id, "--ostype", "Ubuntu_64"]
+    end
+
+    ["vmware_workstation", "vmware_fusion"].each do |provider|
+      config.vm.provider provider do |v|
+        v.vmx["memsize"] = settings["memory"] ||= 1
+        v.vmx["numvcpus"] = settings["cpus"] ||= 1
+      end
     end
 
     # Configure Port Forwarding To The Box
