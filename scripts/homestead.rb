@@ -4,6 +4,9 @@ class Homestead
     config.vm.box = settings["box_name"] ||= "laravel/homestead"
     config.vm.hostname = "homestead"
 
+    # no default directory..
+    config.vm.synced_folder ".", "/vagrant", disabled: true
+
     # Configure A Private Network IP
     config.vm.network :private_network, ip: settings["ip"] ||= "192.168.10.10"
 
